@@ -1,5 +1,5 @@
 // supabaseUtils.js
-import { supabase } from '../supabase'; 
+import { supabase } from '../data/supabase'; 
 
 export async function obtenerUltimoRegistro(tabla, columna) {
   let { data, error } = await supabase

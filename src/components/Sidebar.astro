@@ -1,103 +1,162 @@
 ---
-interface SidebarProps {
-  data: Array<{
-    id: string;
-    valor: number;
-    cantidad_suministrada: number;
-    hora: string;
-    fecha: string;
-  }>;
-  meses: string[];
-}
-
-const { data, meses } = Astro.props;
 ---
 
-<nav class="nav-months">
-  {meses.map((month, index) => {
-    const datosMes = data.filter(item => new Date(item.fecha).getMonth() === index);
-    return (
-      <button class="nav-link" value={month} data-info={JSON.stringify(datosMes)}>
-        {month}
-      </button>
-    );
-  })}
-</nav>
+<div class="sidebar-container">
+  <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-logo">
+        <img src="/public/hidroponia.png" alt="Logo" />
+        <h2>Sistema Hidropónico</h2>
+      </div>
+    </div>
+    <ul class="sidebar-menu">
+      <li>
+        <a href="/" class="menu-item active">
+          
+          <span class="menu-icon">🏠</span>
+          <span class="menu-text">Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a href="/ph" class="menu-item">
+          <span class="menu-icon">💧</span>
+          <span class="menu-text">PH</span>
+        </a>
+      </li>
+      <li>
+        <a href="/nivel_agua" class="menu-item">
+          <span class="menu-icon">🌿</span>
+          <span class="menu-text">Nivel de Agua</span>
+        </a>
+      </li>
+      <li>
+        <a href="/temperatura" class="menu-item">
+          <span class="menu-icon">🌡️</span>
+          <span class="menu-text">Temperatura</span>
+        </a>
+      </li>
+      <li>
+        <a href="/humedad" class="menu-item">
+          <span class="menu-icon">💧</span>
+          <span class="menu-text">Humedad</span>
+        </a>
+      </li>
+      <li>
+        <a href="/luz" class="menu-item">
+          <span class="menu-icon">💡</span>
+          <span class="menu-text">Luz</span>
+        </a>
+      </li>
+      <li>
+        <a href="/mantenimiento" class="menu-item">
+          <span class="menu-icon">🛠️</span>
+          <span class="menu-text">Mantenimiento</span>
+        </a>
+      </li>
+      <li>
+        <a href="/cerrar-sesion" class="menu-item">
+          <span class="menu-icon">🚪</span>
+          <span class="menu-text">Cerrar sesión</span>
+        </a>
+      </li>
+      <li>
+        <a href="/configuracion" class="menu-item">
+          <span class="menu-icon">⚙️</span>
+          <span class="menu-text">Configuración</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
 
-<script type="module">
+<style>
+  .sidebar-container {
+    position: relative;
+  }
+
+  .sidebar-toggle {
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    border: none;
+    padding: 1rem;
+    cursor: pointer;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+  }
+
+  .sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    position: fixed;
+    top: 0;
+    left: -250px; /* Hidden by default */
+    transition: left 0.3s;
+    overflow-y: auto;
+  }
+
+  .sidebar.open {
+    left: 0; /* Show sidebar */
+  }
+
+  .sidebar-header {
+    padding: 1rem;
+    background-color: var(--sidebar-header-bg);
+    text-align: center;
+  }
+
+  .sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .menu-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    transition: background-color 0.3s;
+  }
+
+  .menu-item:hover,
+  .menu-item.active {
+    background-color: var(--sidebar-hover);
+  }
+
+  .menu-icon {
+    margin-right: 1rem;
+  }
+
+  .brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    color: var(--brand-logo-text);
+    background-color: var(--brand-logo-bg);
+  }
+
+  .brand-logo img {
+    max-height: 18px;
+  }
+</style>
+
+<script>
   document.addEventListener("DOMContentLoaded", function() {
-    const buttons = document.querySelectorAll(".nav-link");
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const sidebar = document.getElementById('sidebar');
 
-    buttons.forEach(button => {
-      button.addEventListener("click", () => {
-        // Quitar la clase 'selected-month' de todos los botones
-        buttons.forEach(btn => btn.classList.remove('selected-month'));
-        
-        // Agregar la clase 'selected-month' al botón clickeado
-        button.classList.add('selected-month');
-
-        const datosMes = JSON.parse(button.getAttribute('data-info'));
-
-        // Emitir un evento personalizado para actualizar la tabla
-        const event = new CustomEvent("mesSeleccionado", { detail: datosMes });
-        document.dispatchEvent(event);
+    if (sidebarToggle && sidebar) {
+      sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
       });
-    });
+    }
   });
 </script>
 
-<style>
-.nav-months {
-  display: flex;
-  flex-direction: column;
-}
-
-.nav-link {
-  padding: 10px;
-  margin-bottom: 5px;
-  text-decoration: none;
-  color: #000; /* Esto asegura que el color de la fuente sea negro */
-  border: 1px solid #d3d3d3;
-  border-radius: 15px;
-  display: flex; /* Cambiado a flex para permitir centrado vertical */
-  align-items: center; /* Centrado vertical */
-  justify-content: center; /* Centrado horizontal */
-  transition: background-color 0.3s;
-}
-
-.nav-months .nav-link {
-  color: #000 !important;
-}
-
-.nav-link:hover {
-  background-color: #f2f2f2;
-}
-
-.nav-link.selected-month, .nav-link.selected-month:hover {
-  background-color: #d3d2d2; /* Color de fondo para el mes seleccionado */
-  color: white; /* Cambia el color del texto si es necesario */
-}
-
-/* Responsive styles */
-@media (max-width: 768px) {
-  .nav-months {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
-  }
-
-  .nav-link {
-    flex-basis: calc(50% - 20px);
-    margin: 10px;
-    text-align: center; /* Esto ya estaba, pero es redundante con flexbox */
-  }
-}
-
-@media (max-width: 480px) {
-  .nav-link {
-    flex-basis: 100%;
-    margin: 5px 0;
-    text-align: center; /* Esto ya estaba, pero es redundante con flexbox */
-  }
-}
-</style>

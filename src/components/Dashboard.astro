@@ -1,5 +1,5 @@
 ---
-import Sidebar from '../components/Sidebar.astro';
+import Months from '../components/Months.astro';
 import Table from '../components/Table.astro';
 
 interface BackgroundProps {
@@ -37,7 +37,7 @@ const meses = [
   <h1 class="title">{title}</h1>
   <section class="content">
     <aside class="sidebar">
-      <Sidebar meses={meses} data={data} />
+      <Months meses={meses} data={data} />
     </aside>
     <div class="table-container">
       <Table data={data} backgroundColor={backgroundColor} />

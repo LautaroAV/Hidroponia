@@ -5,143 +5,105 @@ interface Props {
   route: string;
   title: string;
   subtitle: string;
-  valor: number;
-  valor2: number;
+  valor: string;
   fecha: string;
   hora: string;
 }
 
-const { bgFirst, bgSecond, route, title, subtitle, valor, valor2, fecha, hora } = Astro.props;
+const { bgFirst, bgSecond, route, title, subtitle, valor, fecha, hora } = Astro.props;
 ---
 
 <a href={route} class="route">
-	<div
-	  class="card-dashboard"
-	  style={`background-image: linear-gradient(240deg, ${bgFirst}, ${bgSecond});`}
-	>
-	  <>
-		<h2 class="title">{title}</h2>
-		<div class="value-container">
-		  <span class="valor">
-			{valor} 
-		  </span>
-		  <span class="subtitle">
-			{subtitle}
-		  </span>
-		  <span class="fecha">
-			{fecha} 
-		  </span>
-		  <span class="hora">
-			{hora} 
-		  </span>
-		</div>
-	  </>
-	</div>
-  </a>
-  
-  <style>
-	.route {
-	  text-decoration: none !important;
-	}
-  
-	.card-dashboard {
-	  display: flex;
-	  flex-direction: column;
-	  justify-content: space-between;
-	  min-width: 280px;
-	  height: 250px;
-	  border-radius: 10px;
-	  box-shadow: var(--md-shadow);
-	  padding: 1rem;
-	  color: white;
-	  transition: transform 0.3s ease, box-shadow 0.3s ease;
-	}
-  
-	.card-dashboard:hover {
-	  transform: scale(1.05);
-	  box-shadow: var(--md-shadow-hover);
-	}
-  
-	.skeleton {
-	  width: 100%;
-	  height: 100%;
-	  border-radius: 10px;
-	  background-color: #eee;
-	}
-  
-	.value-container {
-	  height: 80%;
-	  display: flex;
-	  flex-direction: column;
-	  justify-content: space-between; 
-	}
-  
-	.value {
-	  opacity: 0.85;
-	  font-weight: 700;
-	  color: whitesmoke;
-	}
-  
-  
-	.title {
-	  font-size: 2.525rem;
-	  font-weight: 700;
-	}
-  
-	.valor {
-	  font-size: 2.225rem;
-	  font-weight: bold;
-	  color: rgb(17, 17, 17);
-	  margin-top: 15px; 
-	  padding-bottom: 12px;
-	}
-	
-	.subtitle {
-		font-size: 1.500rem;
-		font-weight: 700;
-		color: rgb(17, 17, 17);
-		padding-bottom: 40px;
-	}
-  
-	.fecha {
-		font-size: 1.200rem;
-		font-weight: 600;
-		color: rgb(17, 17, 17);
-	}
-  
-	.hora {
-		font-size: 1.200rem;
-		font-weight: 600;
-		color: rgb(17, 17, 17);
-	}
-  
-	:root {
-	  --md-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-	  --md-shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.3);
-	}
-  
-	@media (max-width: 1700px) {
-	.card-dashboard {
-	  min-width: 100%;
-	  padding: 0.5rem;
-	}
-  
-	.title, .valor, .subtitle, .fecha, .hora {
-	  font-size: 1.4rem; /* ajustar según sea necesario */
-	}
+  <div
+    class="card-dashboard"
+    style={`background-image: linear-gradient(240deg, ${bgFirst}, ${bgSecond});`}
+  >
+    <h2 class="title">{title}</h2>
+    <div class="value-container">
+      <span class="valor">{valor}</span>
+      <span class="subtitle">{subtitle}</span>
+      <span class="fecha">{fecha}</span>
+      <span class="hora">{hora}</span>
+    </div>
+  </div>
+</a>
+
+<style>
+  .route {
+    text-decoration: none !important;
+  }
+
+  .card-dashboard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 280px;
+    height: 250px;
+    border-radius: 10px;
+    border-radius: 10px;
+    box-shadow: var(--md-shadow);
+    padding: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card-dashboard:hover {
+    transform: scale(1.05);
+    box-shadow: var(--md-shadow-hover);
+  }
+
+  .value-container {
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
+  }
+
+  .title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-color-light); 
+  }
+
+  .valor {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-top: 10px; 
+    color: var(--text-color-light);
   }
   
-	@media (max-width: 600px) {
-	.card-dashboard {
-	  min-width: 100%;
-	  padding: 0.5rem;
-	}
-  
-	.title, .valor, .subtitle, .fecha, .hora {
-	  font-size: 1rem; /* ajustar según sea necesario */
-	}
+  .subtitle {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-color-light); 
   }
-  
-  
-  </style>
-  
+
+  .fecha, .hora {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-color-light);
+  }
+
+  body.dark-mode .title,
+  body.dark-mode .valor,
+  body.dark-mode .subtitle,
+  body.dark-mode .fecha,
+  body.dark-mode .hora {
+    color: var(--text-color-dark); 
+  }
+
+  :root {
+    --md-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    --md-shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  @media (max-width: 600px) {
+    .card-dashboard {
+      min-width: 100%;
+      padding: 0.5rem;
+    }
+
+    .title, .valor, .subtitle, .fecha, .hora {
+      font-size: 1rem;
+    }
+  }
+</style>

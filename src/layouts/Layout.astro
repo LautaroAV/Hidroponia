@@ -1,4 +1,5 @@
 ---
+import Sidebar from '../components/Sidebar.astro';
 interface Props {
   title: string;
 }
@@ -16,9 +17,10 @@ const { title } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
+  <Sidebar/>
   <body>
     <button id="theme-toggle">Toggle Theme</button>
-    <slot />
+    <slot />  
   </body>
 
   <script>
@@ -29,72 +31,76 @@ const { title } = Astro.props;
       // Check for saved user preference, if any, on load of the website
       if (localStorage.getItem('theme') === 'dark') {
         body.classList.add('dark-mode');
+        body.classList.remove('light-mode');
       } else {
+        body.classList.add('light-mode');
         body.classList.remove('dark-mode');
       }
 
-      themeToggle.addEventListener('click', () => {
-        body.classList.toggle('dark-mode');
-        if (body.classList.contains('dark-mode')) {
-          localStorage.setItem('theme', 'dark');
-        } else {
-          localStorage.setItem('theme', 'light');
-        }
-      });
+      if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+          body.classList.toggle('dark-mode');
+          body.classList.toggle('light-mode');
+          if (body.classList.contains('dark-mode')) {
+            localStorage.setItem('theme', 'dark');
+          } else {
+            localStorage.setItem('theme', 'light');
+          }
+        });
+      }
     });
   </script>
+
+  <style is:global>
+    :root {
+      --accent: 136, 58, 234;
+      --accent-light: 224, 204, 250;
+      --accent-dark: 49, 10, 101;
+      --accent-gradient: linear-gradient(
+        45deg,
+        rgb(var(--accent)),
+        rgb(var(--accent-light)) 30%,
+        white 60%
+      );
+      --background-color-light: #ffffff;
+      --background-color-dark: #13151a;
+      --text-color-light: #000000;
+      --text-color-dark: #ffffff;
+    }
+
+    html {
+      font-family: system-ui, sans-serif;
+    }
+
+    body {
+      background: var(--background-color-light);
+      color: var(--text-color-light);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.dark-mode {
+      background: var(--background-color-dark);
+      color: var(--text-color-dark);
+    }
+
+    code {
+      font-family:
+        Menlo,
+        Monaco,
+        Lucida Console,
+        Liberation Mono,
+        DejaVu Sans Mono,
+        Bitstream Vera Sans Mono,
+        Courier New,
+        monospace;
+    }
+
+    #theme-toggle {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  </style>
 </html>
-
-<style is:global>
-  :root {
-    --accent: 136, 58, 234;
-    --accent-light: 224, 204, 250;
-    --accent-dark: 49, 10, 101;
-    --accent-gradient: linear-gradient(
-      45deg,
-      rgb(var(--accent)),
-      rgb(var(--accent-light)) 30%,
-      white 60%
-    );
-
-    --background-light: #ffffff;
-    --background-dark: #13151a;
-    --text-light: #000000;
-    --text-dark: #ffffff;
-  }
-
-  html {
-    font-family: system-ui, sans-serif;
-  }
-
-  body {
-    background: var(--background-light);
-    color: var(--text-light);
-    transition: background 0.3s, color 0.3s;
-  }
-
-  body.dark-mode {
-    background: var(--background-dark);
-    color: var(--text-dark);
-  }
-
-  code {
-    font-family:
-      Menlo,
-      Monaco,
-      Lucida Console,
-      Liberation Mono,
-      DejaVu Sans Mono,
-      Bitstream Vera Sans Mono,
-      Courier New,
-      monospace;
-  }
-
-  #theme-toggle {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 10px 20px;
-    cursor: pointer;
-  }
-</style>
