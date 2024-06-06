@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Dashboard from '../components/Dashboard.astro';
+import { supabase } from "../data/supabase";
+
+let { data: nivel_agua, error: nivel_aguaError } = await supabase
+  .from("nivel_agua")
+  .select("*");
+if (nivel_aguaError) {
+  console.error("Error fetching nivel_agua data:", nivel_aguaError);}
+---
+
+<Layout title="Nivel de agua">
+    <div class="container">
+      <Dashboard title="Nivel de agua" backgroundColor="#FFAA6B" data={nivel_agua} />
+    </div>
+</Layout>
+
+<style>
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+</style>
+

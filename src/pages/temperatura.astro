@@ -3,20 +3,18 @@ import Layout from '../layouts/Layout.astro';
 import Dashboard from '../components/Dashboard.astro';
 import { supabase } from "../data/supabase";
 
-let { data: humedad, error: humedadError } = await supabase
-  .from("humedad")
+let { data: temperatura, error: temperaturaError } = await supabase
+  .from("temperatura")
   .select("*");
-if (humedadError) {
-  console.error("Error fetching humedad data:", humedadError);
-}
+if (temperaturaError) {
+  console.error("Error fetching temperatura data:", temperaturaError);}
 ---
 
-<Layout title="Humedad">
+<Layout title="Temperatura">
   <div class="container">
-    <Dashboard title="Humedad" , backgroundColor="#FF6B6B" data={humedad} />
+    <Dashboard title="Temperatura" backgroundColor="#FFC700" data={temperatura} />
   </div>
 </Layout>
-
 
 <style>
   .container {
