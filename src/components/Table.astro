@@ -1,0 +1,121 @@
+---
+interface TableProps {
+  data: Array<{
+    id: string;
+    valor: number;
+    cantidad_suministrada: number;
+    hora: string;
+    fecha: string;
+  }>;
+  backgroundColor: string;
+}
+
+const { data, backgroundColor } = Astro.props;
+---
+
+<div class="table-container">
+  <table class={`table ${backgroundColor === "#333333" ? "nutrient-table-dark" : "nutrient-table-light"}`}>
+    <thead>
+      <tr>
+        {Object.keys(data[0]).map((columnName) => (
+          <th>{columnName.replace(/_/g, " ")}</th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {/* Los datos de la tabla se llenarán dinámicamente */}
+    </tbody>
+  </table>
+</div>
+
+<script type="module">
+  export function actualizarTabla(datos) {
+    const tbody = document.querySelector('.table tbody');
+    tbody.innerHTML = '';
+
+    const numColumnas = document.querySelector('.table thead tr').children.length;
+
+    if (datos.length === 0) {
+      const tr = document.createElement('tr');
+      const td = document.createElement('td');
+      tr.style.backgroundColor = "#ffffff"; 
+      td.style.textAlign = "center";
+      td.textContent = "No hay datos para este mes";
+      td.colSpan = numColumnas;
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+    } else {
+      datos.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.className = "tr-style";
+        tr.style.backgroundColor = "#ffffff"; 
+        Object.keys(item).forEach(key => {
+          const td = document.createElement('td');
+          td.className = "td-style";
+          td.textContent = item[key];
+          td.style.color = "#000000";
+          td.style.textAlign = "center";
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    }
+  }
+
+  // Escucha el evento personalizado para actualizar la tabla
+  document.addEventListener("mesSeleccionado", (event) => {
+    const datosMes = event.detail;
+    actualizarTabla(datosMes);
+  });
+</script>
+
+<style>
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #d3d3d3;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.table th,
+.table td {
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.table th {
+  background-color: #f2f2f2;
+}
+
+.table tbody tr {
+  background-color: #fff;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .table th,
+  .table td {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .table th,
+  .table td {
+    padding: 5px;
+    font-size: 14px;
+  }
+}
+
+.nutrient-table-light {
+  color: var(--text-color-light);
+}
+
+.nutrient-table-dark {
+  color: var(--text-color-dark);
+}
+</style>

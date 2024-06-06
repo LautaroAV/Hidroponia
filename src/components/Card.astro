@@ -1,61 +1,147 @@
 ---
 interface Props {
-	title: string;
-	body: string;
-	href: string;
+  bgFirst: string;
+  bgSecond: string;
+  route: string;
+  title: string;
+  subtitle: string;
+  valor: number;
+  valor2: number;
+  fecha: string;
+  hora: string;
 }
 
-const { href, title, body } = Astro.props;
+const { bgFirst, bgSecond, route, title, subtitle, valor, valor2, fecha, hora } = Astro.props;
 ---
 
-<li class="link-card">
-	<a href={href}>
-		<h2>
-			{title}
-			<span>&rarr;</span>
-		</h2>
-		<p>
-			{body}
-		</p>
-	</a>
-</li>
-<style>
-	.link-card {
-		list-style: none;
-		display: flex;
-		padding: 1px;
-		background-color: #23262d;
-		background-image: none;
-		background-size: 400%;
-		border-radius: 7px;
-		background-position: 100%;
-		transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+<a href={route} class="route">
+	<div
+	  class="card-dashboard"
+	  style={`background-image: linear-gradient(240deg, ${bgFirst}, ${bgSecond});`}
+	>
+	  <>
+		<h2 class="title">{title}</h2>
+		<div class="value-container">
+		  <span class="valor">
+			{valor} 
+		  </span>
+		  <span class="subtitle">
+			{subtitle}
+		  </span>
+		  <span class="fecha">
+			{fecha} 
+		  </span>
+		  <span class="hora">
+			{hora} 
+		  </span>
+		</div>
+	  </>
+	</div>
+  </a>
+  
+  <style>
+	.route {
+	  text-decoration: none !important;
 	}
-	.link-card > a {
-		width: 100%;
-		text-decoration: none;
-		line-height: 1.4;
-		padding: calc(1.5rem - 1px);
-		border-radius: 8px;
-		color: white;
-		background-color: #23262d;
-		opacity: 0.8;
+  
+	.card-dashboard {
+	  display: flex;
+	  flex-direction: column;
+	  justify-content: space-between;
+	  min-width: 280px;
+	  height: 250px;
+	  border-radius: 10px;
+	  box-shadow: var(--md-shadow);
+	  padding: 1rem;
+	  color: white;
+	  transition: transform 0.3s ease, box-shadow 0.3s ease;
 	}
-	h2 {
-		margin: 0;
-		font-size: 1.25rem;
-		transition: color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  
+	.card-dashboard:hover {
+	  transform: scale(1.05);
+	  box-shadow: var(--md-shadow-hover);
 	}
-	p {
-		margin-top: 0.5rem;
-		margin-bottom: 0;
+  
+	.skeleton {
+	  width: 100%;
+	  height: 100%;
+	  border-radius: 10px;
+	  background-color: #eee;
 	}
-	.link-card:is(:hover, :focus-within) {
-		background-position: 0;
-		background-image: var(--accent-gradient);
+  
+	.value-container {
+	  height: 80%;
+	  display: flex;
+	  flex-direction: column;
+	  justify-content: space-between; 
 	}
-	.link-card:is(:hover, :focus-within) h2 {
-		color: rgb(var(--accent-light));
+  
+	.value {
+	  opacity: 0.85;
+	  font-weight: 700;
+	  color: whitesmoke;
 	}
-</style>
+  
+  
+	.title {
+	  font-size: 2.525rem;
+	  font-weight: 700;
+	}
+  
+	.valor {
+	  font-size: 2.225rem;
+	  font-weight: bold;
+	  color: rgb(17, 17, 17);
+	  margin-top: 15px; 
+	  padding-bottom: 12px;
+	}
+	
+	.subtitle {
+		font-size: 1.500rem;
+		font-weight: 700;
+		color: rgb(17, 17, 17);
+		padding-bottom: 40px;
+	}
+  
+	.fecha {
+		font-size: 1.200rem;
+		font-weight: 600;
+		color: rgb(17, 17, 17);
+	}
+  
+	.hora {
+		font-size: 1.200rem;
+		font-weight: 600;
+		color: rgb(17, 17, 17);
+	}
+  
+	:root {
+	  --md-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	  --md-shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.3);
+	}
+  
+	@media (max-width: 1700px) {
+	.card-dashboard {
+	  min-width: 100%;
+	  padding: 0.5rem;
+	}
+  
+	.title, .valor, .subtitle, .fecha, .hora {
+	  font-size: 1.4rem; /* ajustar según sea necesario */
+	}
+  }
+  
+	@media (max-width: 600px) {
+	.card-dashboard {
+	  min-width: 100%;
+	  padding: 0.5rem;
+	}
+  
+	.title, .valor, .subtitle, .fecha, .hora {
+	  font-size: 1rem; /* ajustar según sea necesario */
+	}
+  }
+  
+  
+  </style>
+  

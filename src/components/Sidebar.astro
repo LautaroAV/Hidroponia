@@ -1,0 +1,103 @@
+---
+interface SidebarProps {
+  data: Array<{
+    id: string;
+    valor: number;
+    cantidad_suministrada: number;
+    hora: string;
+    fecha: string;
+  }>;
+  meses: string[];
+}
+
+const { data, meses } = Astro.props;
+---
+
+<nav class="nav-months">
+  {meses.map((month, index) => {
+    const datosMes = data.filter(item => new Date(item.fecha).getMonth() === index);
+    return (
+      <button class="nav-link" value={month} data-info={JSON.stringify(datosMes)}>
+        {month}
+      </button>
+    );
+  })}
+</nav>
+
+<script type="module">
+  document.addEventListener("DOMContentLoaded", function() {
+    const buttons = document.querySelectorAll(".nav-link");
+
+    buttons.forEach(button => {
+      button.addEventListener("click", () => {
+        // Quitar la clase 'selected-month' de todos los botones
+        buttons.forEach(btn => btn.classList.remove('selected-month'));
+        
+        // Agregar la clase 'selected-month' al botón clickeado
+        button.classList.add('selected-month');
+
+        const datosMes = JSON.parse(button.getAttribute('data-info'));
+
+        // Emitir un evento personalizado para actualizar la tabla
+        const event = new CustomEvent("mesSeleccionado", { detail: datosMes });
+        document.dispatchEvent(event);
+      });
+    });
+  });
+</script>
+
+<style>
+.nav-months {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-link {
+  padding: 10px;
+  margin-bottom: 5px;
+  text-decoration: none;
+  color: #000; /* Esto asegura que el color de la fuente sea negro */
+  border: 1px solid #d3d3d3;
+  border-radius: 15px;
+  display: flex; /* Cambiado a flex para permitir centrado vertical */
+  align-items: center; /* Centrado vertical */
+  justify-content: center; /* Centrado horizontal */
+  transition: background-color 0.3s;
+}
+
+.nav-months .nav-link {
+  color: #000 !important;
+}
+
+.nav-link:hover {
+  background-color: #f2f2f2;
+}
+
+.nav-link.selected-month, .nav-link.selected-month:hover {
+  background-color: #d3d2d2; /* Color de fondo para el mes seleccionado */
+  color: white; /* Cambia el color del texto si es necesario */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .nav-months {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  .nav-link {
+    flex-basis: calc(50% - 20px);
+    margin: 10px;
+    text-align: center; /* Esto ya estaba, pero es redundante con flexbox */
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-link {
+    flex-basis: 100%;
+    margin: 5px 0;
+    text-align: center; /* Esto ya estaba, pero es redundante con flexbox */
+  }
+}
+</style>

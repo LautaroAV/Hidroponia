@@ -1,0 +1,111 @@
+---
+import Sidebar from '../components/Sidebar.astro';
+import Table from '../components/Table.astro';
+
+interface BackgroundProps {
+  title: string;
+  backgroundColor: string;
+  data: Array<{
+    id: string;
+    valor: number;
+    cantidad_suministrada: number;
+    hora: string;
+    fecha: string;
+  }>;
+}
+
+const props = Astro.props;
+const { title, backgroundColor, data } = props;
+
+const meses = [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
+];
+---
+
+<div class="dashboard-container" style={{ "background-color": backgroundColor }}>
+  <h1 class="title">{title}</h1>
+  <section class="content">
+    <aside class="sidebar">
+      <Sidebar meses={meses} data={data} />
+    </aside>
+    <div class="table-container">
+      <Table data={data} backgroundColor={backgroundColor} />
+    </div>
+  </section>
+</div>
+
+<style>
+/* Base styles */
+h1 {
+  color: white;
+}
+
+body {
+  margin: 0;
+  font-family: "Arial", sans-serif;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 1300px;
+  margin: auto;
+}
+
+.content {
+  display: flex;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.sidebar {
+  background-color: #ffffff;
+  border: 1px solid #d3d3d3;
+  border-radius: 10px;
+  margin-right: 20px;
+  padding: 20px;
+  flex: 1;
+}
+
+.table-container {
+  flex: 3;
+  overflow-x: auto;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .table-container {
+    width: 100%;
+  }
+}
+</style>
