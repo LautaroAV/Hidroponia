@@ -2,8 +2,13 @@
 import Layout from '../layouts/Layout.astro';
 import Card from '../components/Card.astro';
 import { obtenerUltimoRegistro, obtenerRegistroMantenimiento } from "../utils/supabaseUtils";
+import { checkAuthentication } from "../utils/authUtils";
 
-// Asegúrate de que estas funciones devuelvan los datos correctos
+const authResult = await checkAuthentication(Astro);
+if (authResult instanceof Response) {
+  return authResult;
+}
+
 let humedad = await obtenerUltimoRegistro("humedad", "valor");
 let ph = await obtenerUltimoRegistro("pH", "valor");
 let nivel_agua = await obtenerUltimoRegistro("nivel_agua", "valor");
@@ -122,7 +127,7 @@ const mantenimientoData = formatData(mantenimiento);
   .text-gradient {
     background-image: var(--accent-gradient);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-text-fill-color: transparent);
     background-size: 400%;
     background-position: 0%;
   }

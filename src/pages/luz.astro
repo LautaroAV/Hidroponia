@@ -2,6 +2,12 @@
 import Layout from '../layouts/Layout.astro';
 import Dashboard from '../components/Dashboard.astro';
 import { supabase } from "../data/supabase";
+import { checkAuthentication } from "../utils/authUtils";
+
+const authResult = await checkAuthentication(Astro);
+if (authResult instanceof Response) {
+  return authResult;
+}
 
 let { data: luz, error: luzError } = await supabase.from("luz").select("*");
 if (luzError) {

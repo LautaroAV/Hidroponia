@@ -7,7 +7,11 @@ export const POST = async ({ request, cookies, redirect }) => {
     const password = formData.get("password")?.toString();
 
     if (!email || !password) {
-      return new Response("Email and password are required", { status: 400 });
+      return redirect(`/login?error=${encodeURIComponent("Email and password are required")}`);
+    }
+
+    if (!email.includes("@")) {
+      return redirect(`/login?error=${encodeURIComponent("El correo electrónico debe contener un '@'")}`);
     }
 
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -16,7 +20,10 @@ export const POST = async ({ request, cookies, redirect }) => {
     });
 
     if (error) {
-      return new Response(error.message, { status: 500 });
+      const errorMessage = error.message === "Invalid login credentials" ? 
+        "Credenciales de inicio de sesión inválidas" : 
+        "Se produjo un error al iniciar sesión";
+      return redirect(`/login?error=${encodeURIComponent(errorMessage)}`);
     }
 
     const { access_token, refresh_token } = data.session;
@@ -35,6 +42,6 @@ export const POST = async ({ request, cookies, redirect }) => {
 
     return redirect("/");
   } catch (err) {
-    return new Response("Failed to process request", { status: 500 });
+    return redirect(`/login?error=${encodeURIComponent("Failed to process request")}`);
   }
 };
