@@ -1,73 +1,29 @@
 ---
+import SidebarHeader from '../components/SidebarHeader.astro'
+import MenuItem from '../components/MenuItem.astro'
 ---
 
-<div class="sidebar-container">
+<div class="sidebar-container collapsed">
   <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
   <nav class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <div class="brand-logo">
-        <img src="/hidroponia.png" alt="Logo" />
-        <h2>Sistema Hidropónico</h2>
-      </div>
-    </div>
+    <SidebarHeader />
     <ul class="sidebar-menu">
-      <li>
-        <a href="/" class="menu-item active">
-          
-          <span class="menu-icon">🏠</span>
-          <span class="menu-text">Dashboard</span>
-        </a>
-      </li>
-      <li>
-        <a href="/ph" class="menu-item">
-          <span class="menu-icon">💧</span>
-          <span class="menu-text">PH</span>
-        </a>
-      </li>
-      <li>
-        <a href="/nivel_agua" class="menu-item">
-          <span class="menu-icon">🌿</span>
-          <span class="menu-text">Nivel de Agua</span>
-        </a>
-      </li>
-      <li>
-        <a href="/temperatura" class="menu-item">
-          <span class="menu-icon">🌡️</span>
-          <span class="menu-text">Temperatura</span>
-        </a>
-      </li>
-      <li>
-        <a href="/humedad" class="menu-item">
-          <span class="menu-icon">💧</span>
-          <span class="menu-text">Humedad</span>
-        </a>
-      </li>
-      <li>
-        <a href="/luz" class="menu-item">
-          <span class="menu-icon">💡</span>
-          <span class="menu-text">Luz</span>
-        </a>
-      </li>
-      <li>
-        <a href="/mantenimiento" class="menu-item">
-          <span class="menu-icon">🛠️</span>
-          <span class="menu-text">Mantenimiento</span>
-        </a>
-      </li>
-      <li>
-        <a href="/cerrar-sesion" class="menu-item">
-          <span class="menu-icon">🚪</span>
-          <span class="menu-text">Cerrar sesión</span>
-        </a>
-      </li>
-      <li>
-        <a href="/configuracion" class="menu-item">
-          <span class="menu-icon">⚙️</span>
-          <span class="menu-text">Configuración</span>
-        </a>
+      <MenuItem href="/" icon="mdi:home" text="Dashboard" isActive={true} />
+      <MenuItem href="/nivel_agua" icon="mdi:water" text="Nivel de Agua" />
+      <MenuItem href="/temperatura" icon="mdi:temperature" text="Temperatura" />
+      <MenuItem href="/humedad" icon="mdi:humidity-alert" text="Humedad" />
+      <MenuItem href="/luz" icon="mdi:white-balance-sunny" text="Luz" />
+      <MenuItem href="/mantenimiento" icon="mdi:build" text="Mantenimiento" />
+      <MenuItem href="/configuracion" icon="mdi:settings" text="Configuración" />
+      <li class="logout-item">
+        <MenuItem href="/cerrar-sesion" icon="mdi:logout" text="Cerrar sesión" />
       </li>
     </ul>
   </nav>
+</div>
+
+<div class="main-content" id="main-content">
+  <!-- Aquí va el contenido principal de la página -->
 </div>
 
 <style>
@@ -94,69 +50,142 @@
     color: var(--sidebar-text);
     position: fixed;
     top: 0;
-    left: -250px; /* Hidden by default */
+    left: -250px;
     transition: left 0.3s;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
   }
 
   .sidebar.open {
-    left: 0; /* Show sidebar */
-  }
-
-  .sidebar-header {
-    padding: 1rem;
-    background-color: var(--sidebar-header-bg);
-    text-align: center;
+    left: 0;
   }
 
   .sidebar-menu {
     list-style: none;
     padding: 0;
     margin: 0;
-  }
-
-  .menu-item {
+    flex-grow: 1;
     display: flex;
-    align-items: center;
-    padding: 1rem;
-    color: var(--sidebar-text);
-    text-decoration: none;
-    transition: background-color 0.3s;
+    flex-direction: column;
   }
 
-  .menu-item:hover,
-  .menu-item.active {
-    background-color: var(--sidebar-hover);
+  .sidebar-menu > li:not(.logout-item) {
+    flex-shrink: 0;
   }
 
-  .menu-icon {
-    margin-right: 1rem;
+  .logout-item {
+    margin-top: auto;
+    flex-shrink: 0;
   }
 
-  .brand-logo {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 1rem;
-    color: var(--brand-logo-text);
-    background-color: var(--brand-logo-bg);
+  .main-content {
+    transition: margin-left 0.3s, margin-bottom 0.3s;
   }
 
-  .brand-logo img {
-    max-height: 18px;
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      top: auto;
+      transition: bottom 0.3s;
+    }
+
+    .sidebar-container.collapsed .sidebar {
+      display: none;
+    }
+
+    .sidebar-container.expanded .sidebar {
+      display: block;
+    }
+
+    .sidebar-container.expanded .sidebar-toggle::after {
+      content: '✕';
+    }
+
+    .main-content {
+      margin-bottom: 0;
+    }
+
+    .sidebar-container.expanded ~ .main-content {
+      margin-bottom: 250px;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1300px) {
+    .sidebar-container.collapsed .sidebar {
+      left: -250px;
+    }
+
+    .sidebar-container.expanded .sidebar {
+      left: 0;
+    }
+
+    .main-content {
+      margin-left: 0;
+    }
+
+    .sidebar-container.expanded ~ .main-content {
+      margin-left: 250px;
+    }
+  }
+
+  @media (min-width: 1301px) {
+    .sidebar-container.collapsed .sidebar {
+      left: -250px;
+    }
+
+    .sidebar-container.expanded .sidebar {
+      left: 0;
+    }
+
+    .main-content {
+      margin-left: 0;
+    }
+
+    .sidebar-container.expanded ~ .main-content {
+      margin-left: 250px;
+    }
   }
 </style>
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     const sidebarToggle = document.getElementById('sidebar-toggle');
+    const sidebarContainer = document.querySelector('.sidebar-container');
+    const mainContent = document.getElementById('main-content');
     const sidebar = document.getElementById('sidebar');
 
-    if (sidebarToggle && sidebar) {
+    if (sidebarToggle && sidebarContainer && mainContent && sidebar) {
       sidebarToggle.addEventListener('click', () => {
+        sidebarContainer.classList.toggle('collapsed');
+        sidebarContainer.classList.toggle('expanded');
         sidebar.classList.toggle('open');
+        adjustContentMargin();
       });
+    }
+
+    window.addEventListener('resize', adjustContentMargin);
+
+    function adjustContentMargin() {
+      if (sidebarContainer && mainContent && sidebar) {
+        if (window.innerWidth >= 1301 && sidebarContainer.classList.contains('expanded')) {
+          mainContent.style.marginLeft = `${sidebar.offsetWidth}px`;
+          mainContent.style.marginBottom = '0';
+        } else if (window.innerWidth >= 769 && sidebarContainer.classList.contains('expanded')) {
+          mainContent.style.marginLeft = '0';
+          mainContent.style.marginBottom = `${sidebar.offsetHeight}px`;
+        } else if (sidebarContainer.classList.contains('expanded')) {
+          mainContent.style.marginLeft = '0';
+          mainContent.style.marginBottom = `${sidebar.offsetHeight}px`;
+        } else {
+          mainContent.style.marginLeft = '0';
+          mainContent.style.marginBottom = '0';
+        }
+      }
     }
   });
 </script>
-
