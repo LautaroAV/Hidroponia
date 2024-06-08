@@ -1,4 +1,7 @@
 import { defineConfig } from 'astro/config';
 
-// https://astro.build/config
-export default defineConfig({});
+export default defineConfig({
+  // Other configurations...
+
+  output: 'server', // Change this to 'hybrid' if you need some pages to be static
+});
