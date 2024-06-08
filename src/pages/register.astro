@@ -1,15 +1,18 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import LoginLayout from "../layouts/LoginLayout.astro";
+import Form from "../components/Form.astro";
+import LoginStructure from "../components/LoginStructure.astro";
 ---
 
-<Layout title="Registrarse">
-  <h1>Registrarse</h1>
-  <p>¿Ya tienes una cuenta? <a href="/login">Iniciar sesión</a></p>
-  <form action="/api/auth/register" method="post">
-    <label for="email">Correo electrónico</label>
-    <input type="email" name="email" id="email" />
-    <label for="password">Contraseña</label>
-    <input type="password" name="password" id="password" />
-    <button type="submit">Registrarse</button>
-  </form>
-</Layout>
+<LoginLayout title="Registro">
+  <LoginStructure>
+    <Form
+      title="Registro"
+      action="/api/auth/signup"
+      buttonText="Registrarse"
+      linkText="Inicia sesión"
+      linkHref="/login"
+      linkDescription="¿Ya tenés una cuenta?"
+    />
+  </LoginStructure>
+</LoginLayout>
