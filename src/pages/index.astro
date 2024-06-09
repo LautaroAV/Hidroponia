@@ -33,7 +33,7 @@ const mantenimientoData = formatData(mantenimiento);
 <Layout title="Sistema Hidropónico">
   <main>
     <h1 class="titulo">Sistema Hidropónico</h1>
-    <ul role="list" class="link-card-grid">
+    <div class="link-card-grid">
       <Card
         route="/ph"
         bgFirst="#439BFF"
@@ -60,7 +60,7 @@ const mantenimientoData = formatData(mantenimiento);
         bgSecond="#FFD700"
         title="Temperatura"
         subtitle="Nivel de temperatura aproximado"
-        valor={temperaturaData.valor}
+        valor={`${temperaturaData.valor} °C`}
         fecha={temperaturaData.fecha}
         hora={temperaturaData.hora}
       />
@@ -70,7 +70,7 @@ const mantenimientoData = formatData(mantenimiento);
         bgSecond="#FF7F7F"
         title="Humedad"
         subtitle="Nivel de humedad aproximado"
-        valor={humedadData.valor}
+        valor={`${humedadData.valor}%`}
         fecha={humedadData.fecha}
         hora={humedadData.hora}
       />
@@ -89,33 +89,22 @@ const mantenimientoData = formatData(mantenimiento);
         bgFirst="#33c7a9"
         bgSecond="#33c7a9"
         title="Mantenimiento"
-        subtitle="Nivel de mantenimiento aproximado"
+        subtitle="Sensor a cambiar"
         valor={mantenimientoData.valor}
         fecha={mantenimientoData.fecha}
         hora={mantenimientoData.hora}
       />
-    </ul>
+    </div>
   </main>
 </Layout>
 
 <style>
   main {
     margin: auto;
-    padding: 1rem;
-    width: 800px;
-    max-width: calc(100% - 2rem);
-    color: white;
-    font-size: 20px;
-    line-height: 1.6;
-  }
-  .astro-a {
-    position: absolute;
-    top: -32px;
-    left: 50%;
-    transform: translatex(-50%);
-    width: 220px;
-    height: auto;
-    z-index: -1;
+    padding: 0px 0px 0px auto;
+    width: 100%;
+    max-width: 1200px;
+    color: black;
   }
   h1 {
     font-size: 4rem;
@@ -124,45 +113,78 @@ const mantenimientoData = formatData(mantenimiento);
     text-align: center;
     margin-bottom: 1em;
   }
-  .text-gradient {
-    background-image: var(--accent-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent);
-    background-size: 400%;
-    background-position: 0%;
-  }
-  .instructions {
-    margin-bottom: 2rem;
-    border: 1px solid rgba(var(--accent-light), 25%);
-    background: linear-gradient(rgba(var(--accent-dark), 66%), rgba(var(--accent-dark), 33%));
-    padding: 1.5rem;
-    border-radius: 8px;
-  }
-  .instructions code {
-    font-size: 0.8em;
-    font-weight: bold;
-    background: rgba(var(--accent-light), 12%);
-    color: rgb(var(--accent-light));
-    border-radius: 4px;
-    padding: 0.3em 0.4em;
-  }
-  .instructions strong {
-    color: rgb(var(--accent-light));
-  }
   .link-card-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Ajusta el ancho mínimo y máximo */
-	gap: 2rem;
-	padding: 0;
-}
-  /* Estilos para cambiar el color del h1 según el tema */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding: 0;
+    list-style: none;
+  }
+  @media (max-width: 1200px) {
+    .link-card-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 768px) {
+    .link-card-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .card-dashboard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 400px;
+    height: 250px;
+    border-radius: 10px;
+    box-shadow: var(--md-shadow);
+    padding: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin: 1rem auto;
+  }
+  .card-dashboard:hover {
+    transform: scale(1.05);
+    box-shadow: var(--md-shadow-hover);
+  }
+  .value-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+  .title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+  }
+  .valor {
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+  .subtitle {
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+  .footer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .fecha,
+  .hora {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
   h1.titulo {
     transition: color 0.3s;
   }
   body.light-mode h1.titulo {
-    color: black; /* Color para el tema claro */
+    color: black; 
   }
   body.dark-mode h1.titulo {
-    color: white; /* Color para el tema oscuro */
+    color: white; 
   }
 </style>

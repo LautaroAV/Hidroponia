@@ -28,7 +28,6 @@ const { title } = Astro.props;
       const themeToggle = document.getElementById('theme-toggle');
       const body = document.body;
 
-      // Check for saved user preference, if any, on load of the website
       if (localStorage.getItem('theme') === 'dark') {
         body.classList.add('dark-mode');
         body.classList.remove('light-mode');
