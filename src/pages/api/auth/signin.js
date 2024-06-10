@@ -22,7 +22,7 @@ export const POST = async ({ request, cookies, redirect }) => {
     if (error) {
       const errorMessage = error.message === "Invalid login credentials" ? 
         "Credenciales de inicio de sesión inválidas" : 
-        "Se produjo un error al iniciar sesión";
+        "Verifique su correo electrónico";
       return redirect(`/login?error=${encodeURIComponent(errorMessage)}`);
     }
 

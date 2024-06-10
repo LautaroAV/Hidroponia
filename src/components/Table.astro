@@ -14,10 +14,8 @@ interface TableProps {
 
 const { data, backgroundColor, tableContainerWidth = "100%", tableContainerHeight = "650px" } = Astro.props;
 
-// Guardar una copia de los datos originales
 const datosOriginales = [...data];
 
-// Función para transformar el texto del encabezado
 const transformarTexto = (columnName: string, index: number): string => {
   return index === 0
     ? columnName.replace(/_/g, " ").toUpperCase()
@@ -49,7 +47,6 @@ const transformarTexto = (columnName: string, index: number): string => {
 </div>
 
 <script type="module">
-  // Agregar estilos CSS directamente en el script
   const style = document.createElement('style');
   style.textContent = `
     .table-wrapper {
@@ -138,10 +135,9 @@ const transformarTexto = (columnName: string, index: number): string => {
   `;
   document.head.append(style);
 
-  // Función para actualizar la tabla con nuevos datos y aplicar estilos
   const actualizarTabla = (nuevosDatos) => {
     const tableBody = document.getElementById("table-body");
-    tableBody.innerHTML = ""; // Limpiar el contenido anterior
+    tableBody.innerHTML = ""; 
 
     nuevosDatos.forEach((item) => {
       const row = document.createElement("tr");
@@ -157,7 +153,6 @@ const transformarTexto = (columnName: string, index: number): string => {
       tableBody.appendChild(row);
     });
 
-    // Actualizar la variable CSS con el número de filas
     document.documentElement.style.setProperty('--row-count', nuevosDatos.length);
   };
 

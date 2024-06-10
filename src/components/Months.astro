@@ -12,7 +12,6 @@ interface SidebarProps {
 
 const { data, meses } = Astro.props;
 
-// Función para obtener los años únicos de los datos
 const obtenerAnios = (data) => {
   const anios = [...new Set(data.map(item => new Date(item.fecha).getFullYear()))];
   return anios;
@@ -131,7 +130,7 @@ const anios = obtenerAnios(data);
 }
 
 .nav-link.selected-year, .nav-link.selected-month {
-  background-color: #a9a9a9; /* Color más oscuro para el año o mes seleccionado */
+  background-color: #a9a9a9;
   color: white;
 }
 

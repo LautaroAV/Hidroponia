@@ -18,5 +18,5 @@ export const POST = async ({ request, redirect }) => {
     return new Response(error.message, { status: 500 });
   }
 
-  return redirect(`/login?success=${encodeURIComponent("Usuario creado correctamente")}`);
+  return redirect(`/login?success=${encodeURIComponent("Usuario creado correctamente, verifique su correo electrónico")}`);
 };
