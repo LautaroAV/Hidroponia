@@ -11,43 +11,104 @@ interface SidebarProps {
 }
 
 const { data, meses } = Astro.props;
+
+// Función para obtener los años únicos de los datos
+const obtenerAnios = (data) => {
+  const anios = [...new Set(data.map(item => new Date(item.fecha).getFullYear()))];
+  return anios;
+};
+
+const anios = obtenerAnios(data);
 ---
 
-<nav class="nav-months">
-  {meses.map((month, index) => {
-    const datosMes = data.filter(item => new Date(item.fecha).getMonth() === index);
+<nav class="nav-years">
+  {anios.map((year) => {
+    const datosAnio = data.filter(item => new Date(item.fecha).getFullYear() === year);
     return (
-      <button class="nav-link" value={month} data-info={JSON.stringify(datosMes)}>
-        {month}
+      <button class="nav-link year-link" value={String(year)} data-info={JSON.stringify(datosAnio)}>
+        {year}
       </button>
     );
   })}
+  <button class="nav-link back-link" style="display: none;">Volver</button>
+</nav>
+
+<nav class="nav-months" style="display: none;">
+  {meses.map((month, index) => (
+    <button class="nav-link month-link" value={String(index)} data-month-index={String(index)}>
+      {month}
+    </button>
+  ))}
 </nav>
 
 <script type="module">
-  document.addEventListener("DOMContentLoaded", function() {
-    const buttons = document.querySelectorAll(".nav-link");
+  document.addEventListener("DOMContentLoaded", () => {
+    const yearButtons = document.querySelectorAll(".year-link");
+    const backButton = document.querySelector(".back-link");
+    const monthButtons = document.querySelectorAll(".month-link");
+    const navMonths = document.querySelector(".nav-months");
 
-    buttons.forEach(button => {
+    yearButtons.forEach(button => {
       button.addEventListener("click", () => {
-        // Quitar la clase 'selected-month' de todos los botones
-        buttons.forEach(btn => btn.classList.remove('selected-month'));
-        
-        // Agregar la clase 'selected-month' al botón clickeado
-        button.classList.add('selected-month');
+        yearButtons.forEach(btn => btn.style.display = btn === button ? 'block' : 'none');
+        button.classList.add('selected-year');
+        backButton.style.display = 'block';
+        navMonths.style.display = 'flex';
 
-        const datosMes = JSON.parse(button.getAttribute('data-info'));
+        const datosAnio = JSON.parse(button.getAttribute('data-info'));
+        const mesesDisponibles = new Set(datosAnio.map(item => new Date(item.fecha).getMonth()));
 
-        // Emitir un evento personalizado para actualizar la tabla
-        const event = new CustomEvent("mesSeleccionado", { detail: datosMes });
-        document.dispatchEvent(event);
+        monthButtons.forEach(monthButton => {
+          const monthIndex = parseInt(monthButton.getAttribute('data-month-index'));
+          if (mesesDisponibles.has(monthIndex)) {
+            monthButton.disabled = false;
+            monthButton.classList.remove('disabled-month');
+          } else {
+            monthButton.disabled = true;
+            monthButton.classList.add('disabled-month');
+          }
+        });
       });
+    });
+
+    monthButtons.forEach(monthButton => {
+      monthButton.addEventListener("click", () => {
+        if (!monthButton.disabled) {
+          monthButtons.forEach(btn => btn.classList.remove('selected-month'));
+          monthButton.classList.add('selected-month');
+
+          const yearButton = document.querySelector(".year-link.selected-year");
+          const datosAnio = JSON.parse(yearButton.getAttribute('data-info'));
+          const monthIndex = parseInt(monthButton.getAttribute('data-month-index'));
+          const datosMes = datosAnio.filter(item => new Date(item.fecha).getMonth() === monthIndex);
+
+          const event = new CustomEvent("mesSeleccionado", { detail: datosMes });
+          document.dispatchEvent(event);
+        }
+      });
+    });
+
+    backButton.addEventListener("click", () => {
+      yearButtons.forEach(btn => {
+        btn.style.display = 'block';
+        btn.classList.remove('selected-year');
+      });
+      backButton.style.display = 'none';
+      navMonths.style.display = 'none';
+
+      monthButtons.forEach(btn => {
+        btn.classList.remove('selected-month', 'disabled-month');
+        btn.disabled = false;
+      });
+
+      const event = new CustomEvent("volver");
+      document.dispatchEvent(event);
     });
   });
 </script>
 
 <style>
-.nav-months {
+.nav-years, .nav-months {
   display: flex;
   flex-direction: column;
 }
@@ -56,31 +117,37 @@ const { data, meses } = Astro.props;
   padding: 10px;
   margin-bottom: 5px;
   text-decoration: none;
-  color: #000; /* Esto asegura que el color de la fuente sea negro */
+  color: #000;
   border: 1px solid #d3d3d3;
   border-radius: 15px;
-  display: flex; /* Cambiado a flex para permitir centrado vertical */
-  align-items: center; /* Centrado vertical */
-  justify-content: center; /* Centrado horizontal */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: background-color 0.3s;
-}
-
-.nav-months .nav-link {
-  color: #000 !important;
 }
 
 .nav-link:hover {
   background-color: #f2f2f2;
 }
 
-.nav-link.selected-month, .nav-link.selected-month:hover {
-  background-color: #d3d2d2; /* Color de fondo para el mes seleccionado */
-  color: white; /* Cambia el color del texto si es necesario */
+.nav-link.selected-year, .nav-link.selected-month {
+  background-color: #a9a9a9; /* Color más oscuro para el año o mes seleccionado */
+  color: white;
 }
 
-/* Responsive styles */
+.nav-link.disabled-month {
+  background-color: #e0e0e0;
+  color: #a0a0a0;
+  pointer-events: none;
+}
+
+.nav-link.back-link {
+  background-color: #f2f2f2;
+  color: #000;
+}
+
 @media (max-width: 768px) {
-  .nav-months {
+  .nav-years, .nav-months {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-around;
@@ -89,7 +156,6 @@ const { data, meses } = Astro.props;
   .nav-link {
     flex-basis: calc(50% - 20px);
     margin: 10px;
-    text-align: center; /* Esto ya estaba, pero es redundante con flexbox */
   }
 }
 
@@ -97,7 +163,6 @@ const { data, meses } = Astro.props;
   .nav-link {
     flex-basis: 100%;
     margin: 5px 0;
-    text-align: center; /* Esto ya estaba, pero es redundante con flexbox */
   }
 }
 </style>

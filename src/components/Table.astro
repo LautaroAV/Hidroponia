@@ -8,114 +8,164 @@ interface TableProps {
     fecha: string;
   }>;
   backgroundColor: string;
+  tableContainerWidth?: string;
+  tableContainerHeight?: string;
 }
 
-const { data, backgroundColor } = Astro.props;
+const { data, backgroundColor, tableContainerWidth = "100%", tableContainerHeight = "650px" } = Astro.props;
+
+// Guardar una copia de los datos originales
+const datosOriginales = [...data];
+
+// Función para transformar el texto del encabezado
+const transformarTexto = (columnName: string, index: number): string => {
+  return index === 0
+    ? columnName.replace(/_/g, " ").toUpperCase()
+    : columnName.replace(/_/g, " ").toLowerCase().replace(/^\w/, (c) => c.toUpperCase());
+};
 ---
 
-<div class="table-container">
-  <table class={`table ${backgroundColor === "#333333" ? "nutrient-table-dark" : "nutrient-table-light"}`}>
-    <thead>
-      <tr>
-        {Object.keys(data[0]).map((columnName) => (
-          <th>{columnName.replace(/_/g, " ")}</th>
+<div class="table-wrapper">
+  <div class="table-container" style={`width: ${tableContainerWidth}; height: ${tableContainerHeight};`}>
+    <table class={`table ${backgroundColor === "#333333" ? "nutrient-table-dark" : "nutrient-table-light"}`}>
+      <thead>
+        <tr>
+          {Object.keys(data[0]).map((columnName, index) => (
+            <th>{transformarTexto(columnName, index)}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        {data.map((item) => (
+          <tr class="tr-style">
+            {Object.keys(item).map((key) => (
+              <td class={`td-style ${key === 'id' ? 'td-bold' : ''}`}>{item[key]}</td>
+            ))}
+          </tr>
         ))}
-      </tr>
-    </thead>
-    <tbody>
-      {/* Los datos de la tabla se llenarán dinámicamente */}
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <script type="module">
-  export function actualizarTabla(datos) {
-    const tbody = document.querySelector('.table tbody');
-    tbody.innerHTML = '';
-
-    const numColumnas = document.querySelector('.table thead tr').children.length;
-
-    if (datos.length === 0) {
-      const tr = document.createElement('tr');
-      const td = document.createElement('td');
-      tr.style.backgroundColor = "#ffffff"; 
-      td.style.textAlign = "center";
-      td.textContent = "No hay datos para este mes";
-      td.colSpan = numColumnas;
-      tr.appendChild(td);
-      tbody.appendChild(tr);
-    } else {
-      datos.forEach(item => {
-        const tr = document.createElement('tr');
-        tr.className = "tr-style";
-        tr.style.backgroundColor = "#ffffff"; 
-        Object.keys(item).forEach(key => {
-          const td = document.createElement('td');
-          td.className = "td-style";
-          td.textContent = item[key];
-          td.style.color = "#000000";
-          td.style.textAlign = "center";
-          tr.appendChild(td);
-        });
-        tbody.appendChild(tr);
-      });
-    }
+  // Agregar estilos CSS directamente en el script
+  const style = document.createElement('style');
+  style.textContent = `
+    .table-wrapper {
+    width: 100%;
+    max-width: 928px;
+    max-height: 650px; /* Solo el uso de max-height sin height fijo */
+    overflow: hidden; /* Cambiado a hidden para evitar que cambie el tamaño con el scroll */
+    box-sizing: border-box;
+    border-radius: 10px;
+    margin: 0 auto;
   }
+    .table-container {
+      width: 100%;
+      height: 650px; /* Tamaño fijo */
+      overflow-x: auto;
+      overflow-y: auto; /* Añadido para manejar el scroll vertical */
+    }
+    .table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid #d3d3d3;
+      border-radius: 10px 0 0 0;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .table th,
+    .table td {
+      padding: 8px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+      height: 50px;
+      width: calc(100% / 5); /* Divide el ancho entre el número de columnas */
+    }
 
-  // Escucha el evento personalizado para actualizar la tabla
+    .table th {
+      background-color: #f2f2f2;
+    }
+    .table tbody tr {
+      background-color: #fff;
+      min-width: 911px;
+      height: 50px;
+    }
+    .table td {
+      font-family: 'Arial', sans-serif;
+      font-size: 14px;
+      padding: 10px 15px;
+      color: #333;
+      border-bottom: 1px solid #ddd;
+    }
+    .td-bold {
+      font-weight: bold;
+    }
+    .nutrient-table-light {
+      color: var(--text-color-light);
+    }
+    @media (max-width: 768px) {
+      .table-wrapper {
+        max-width: 100%;
+      }
+    }
+    @media (max-width: 480px) {
+      .table-wrapper {
+        max-width: 100%;
+      }
+      .table th,
+      .table td {
+        padding: 5px;
+        font-size: 14px;
+      }
+    }
+    .nutrient-table-dark {
+      color: var(--text-color-dark);
+    }
+    .table tbody {
+      height: 100%;
+    }
+    .table tbody:empty::before {
+      content: "\\00a0"; /* non-breaking space */
+      display: table-row;
+      height: 100%;
+    }
+    .table tbody tr:last-child {
+      height: 50px;
+    }
+  `;
+  document.head.append(style);
+
+  // Función para actualizar la tabla con nuevos datos y aplicar estilos
+  const actualizarTabla = (nuevosDatos) => {
+    const tableBody = document.getElementById("table-body");
+    tableBody.innerHTML = ""; // Limpiar el contenido anterior
+
+    nuevosDatos.forEach((item) => {
+      const row = document.createElement("tr");
+      row.className = "tr-style";
+
+      Object.keys(item).forEach((key) => {
+        const cell = document.createElement("td");
+        cell.className = `td-style ${key === 'id' ? 'td-bold' : ''}`;
+        cell.textContent = item[key];
+        row.appendChild(cell);
+      });
+
+      tableBody.appendChild(row);
+    });
+
+    // Actualizar la variable CSS con el número de filas
+    document.documentElement.style.setProperty('--row-count', nuevosDatos.length);
+  };
+
   document.addEventListener("mesSeleccionado", (event) => {
-    const datosMes = event.detail;
-    actualizarTabla(datosMes);
+    actualizarTabla(event.detail);
+  });
+
+  document.addEventListener("volver", () => {
+    actualizarTabla(datosOriginales);
   });
 </script>
-
-<style>
-.table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  border: 1px solid #d3d3d3;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-}
-
-.table th,
-.table td {
-  padding: 8px;
-  text-align: center;
-  border-bottom: 1px solid #ddd;
-}
-
-.table th {
-  background-color: #f2f2f2;
-}
-
-.table tbody tr {
-  background-color: #fff;
-}
-
-/* Responsive styles */
-@media (max-width: 768px) {
-  .table th,
-  .table td {
-    padding: 8px;
-  }
-}
-
-@media (max-width: 480px) {
-  .table th,
-  .table td {
-    padding: 5px;
-    font-size: 14px;
-  }
-}
-
-.nutrient-table-light {
-  color: var(--text-color-light);
-}
-
-.nutrient-table-dark {
-  color: var(--text-color-dark);
-}
-</style>
