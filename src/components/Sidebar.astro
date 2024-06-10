@@ -1,201 +1,344 @@
 ---
-import SidebarHeader from '../components/SidebarHeader.astro'
-import MenuItem from '../components/MenuItem.astro'
+// Importa el componente de Dark Mode
+import DarkMode from './DarkMode.astro';
 ---
 
-<div class="sidebar-container collapsed">
-  <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
-  <nav class="sidebar" id="sidebar">
-    <SidebarHeader />
-    <ul class="sidebar-menu">
-      <MenuItem href="/" icon="mdi:home" text="Dashboard" isActive={true} />
-      <MenuItem href="/nivel_agua" icon="mdi:water" text="Nivel de Agua" />
-      <MenuItem href="/temperatura" icon="mdi:temperature" text="Temperatura" />
-      <MenuItem href="/humedad" icon="mdi:humidity-alert" text="Humedad" />
-      <MenuItem href="/luz" icon="mdi:white-balance-sunny" text="Luz" />
-      <MenuItem href="/mantenimiento" icon="mdi:build" text="Mantenimiento" />
-      <MenuItem href="/configuracion" icon="mdi:settings" text="Configuración" />
-      <li class="logout-item">
-        <MenuItem href="/cerrar-sesion" icon="mdi:logout" text="Cerrar sesión" />
+<div class="menu">
+  <ion-icon name="menu-outline"></ion-icon>
+  <ion-icon name="close-outline"></ion-icon>
+</div>
+
+<div class="barra-lateral">
+  <div class="top-bar">
+    <div class="brand-logo" id="cloud">
+      <img src="/hidroponia.png" alt="Logo" />
+      <span>Sistema Hidroponico</span>
+    </div>
+  </div>
+  <div class="dark-mode-container">
+    <DarkMode />
+  </div>
+  <nav class="navegacion">
+    <ul>
+      <li>
+        <a id="inbox" href="/">
+          <ion-icon name="home-outline"></ion-icon>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a href="/nivel_agua">
+          <ion-icon name="water-outline"></ion-icon>
+          <span>Nivel de Agua</span>
+        </a>
+      </li>
+      <li>
+        <a href="/temperatura">
+          <ion-icon name="thermometer-outline"></ion-icon>
+          <span>Temperatura</span>
+        </a>
+      </li>
+      <li>
+        <a href="/humedad">
+          <ion-icon name="rainy-outline"></ion-icon>
+          <span>Humedad</span>
+        </a>
+      </li>
+      <li>
+        <a href="/luz">
+          <ion-icon name="sunny-outline"></ion-icon>
+          <span>Luz</span>
+        </a>
+      </li>
+      <li>
+        <a href="/mantenimiento">
+          <ion-icon name="hammer-outline"></ion-icon>
+          <span>Mantenimiento</span>
+        </a>
+      </li>
+      <li>
+        <a href="/configuracion">
+          <ion-icon name="settings-outline"></ion-icon>
+          <span>Configuración</span>
+        </a>
       </li>
     </ul>
   </nav>
+
+  <div class="cerrar-sesion">
+    <a href="/api/auth/signout">
+      <ion-icon name="log-out-outline"></ion-icon>
+      <span>Cerrar Sesión</span>
+    </a>
+  </div>
 </div>
 
-<div class="main-content" id="main-content">
-  <!-- Aquí va el contenido principal de la página -->
-</div>
+<main></main>
+
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<script>
+const cloud = document.getElementById("cloud");
+const barraLateral = document.querySelector(".barra-lateral");
+const spans = document.querySelectorAll("span");
+const menu = document.querySelector(".menu");
+const main = document.querySelector("main");
+
+if (menu && barraLateral && main && spans) {
+    menu.addEventListener("click", () => {
+        barraLateral.classList.toggle("max-barra-lateral");
+        if (barraLateral.classList.contains("max-barra-lateral")) {
+            (menu.children[0] as HTMLElement).style.display = "none";
+            (menu.children[1] as HTMLElement).style.display = "block";
+        } else {
+            (menu.children[0] as HTMLElement).style.display = "block";
+            (menu.children[1] as HTMLElement).style.display = "none";
+        }
+        if (window.innerWidth <= 320) {
+            barraLateral.classList.add("mini-barra-lateral");
+            main.classList.add("min-main");
+            spans.forEach((span) => {
+                (span as HTMLElement).classList.add("oculto");
+            });
+        }
+    });
+}
+
+if (cloud && barraLateral && main && spans) {
+    cloud.addEventListener("click", () => {
+        barraLateral.classList.toggle("mini-barra-lateral");
+        main.classList.toggle("min-main");
+        spans.forEach((span) => {
+            (span as HTMLElement).classList.toggle("oculto");
+        });
+    });
+}
+</script>
 
 <style>
-  .sidebar-container {
-    position: relative;
-  }
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap');
 
-    .sidebar-toggle {
-      background: none;
-      border: none;
-      color: var(--sidebar-text-light);
-      padding: 0;
-      cursor: pointer;
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      z-index: 1000;
-      font-size: 1.5rem; 
-    }
+:root {
+    --color-barra-lateral: rgb(255, 255, 255);
+    --color-texto-menu: rgb(134, 136, 144);
+    --color-menu-hover: rgb(238, 238, 238);
+    --color-menu-hover-texto: rgb(0, 0, 0);
+    --color-boton: rgb(0, 0, 0);
+    --color-boton-texto: rgb(255, 255, 255);
+    --color-linea: rgb(180, 180, 180);
+    --color-scroll: rgb(192, 192, 192);
+    --color-scroll-hover: rgb(134, 134, 134);
+    --brand-logo-text: rgb(0, 0, 0);
+    --brand-logo-bg: rgb(255, 255, 255);
+}
 
-  body.dark-mode .sidebar-toggle {
-    color: var(--sidebar-text-dark);
-  }
+body.dark-mode {
+    --color-barra-lateral: rgb(34, 34, 34);
+    --color-texto-menu: rgb(200, 200, 200);
+    --color-menu-hover: rgb(64, 64, 64);
+    --color-menu-hover-texto: rgb(255, 255, 255);
+    --color-boton: rgb(255, 255, 255);
+    --color-boton-texto: rgb(0, 0, 0);
+    --color-linea: rgb(64, 64, 64);
+    --color-scroll: rgb(64, 64, 64);
+    --color-scroll-hover: rgb(134, 134, 134);
+    --brand-logo-text: rgb(255, 255, 255);
+    --brand-logo-bg: rgb(34, 34, 34);
+}
 
-  .sidebar {
-    width: 250px;
-    height: 100vh;
-    background-color: var(--sidebar-bg-light);
-    color: var(--sidebar-text-light);
-    position: fixed;
-    top: 0;
-    left: -250px;
-    transition: left 0.3s, background-color 0.3s, color 0.3s;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-  }
-
-  body.dark-mode .sidebar {
-    background-color: var(--sidebar-bg-dark);
-    color: var(--sidebar-text-dark);
-  }
-
-  .sidebar.open {
-    left: 0;
-  }
-
-  .sidebar-menu {
-    list-style: none;
-    padding: 0;
+* {
     margin: 0;
-    flex-grow: 1;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    height: 100vh;
+    width: 100%;
+}
+
+.menu {
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    font-size: 30px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: var(--color-boton);
+    color: var(--color-boton-texto);
+    right: 15px;
+    top: 15px;
+    z-index: 100;
+}
+
+.barra-lateral {
+    position: fixed;
     display: flex;
     flex-direction: column;
-  }
+    justify-content: flex-start;
+    width: 250px;
+    height: 100%;
+    overflow: hidden;
+    padding: 20px 15px;
+    background-color: var(--color-barra-lateral);
+    transition: width 0.5s ease, background-color 0.3s ease, left 0.5s ease;
+    z-index: 50;
+}
 
-  .sidebar-menu > li:not(.logout-item) {
-    flex-shrink: 0;
-  }
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-  .logout-item {
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    color: var(--brand-logo-text);
+    background-color: var(--brand-logo-bg);
+}
+
+.brand-logo img {
+    max-height: 18px;
+}
+
+.mini-barra-lateral {
+    width: 80px;
+}
+
+.barra-lateral span {
+    width: 100px;
+    white-space: nowrap;
+    font-size: 18px;
+    text-align: left;
+    opacity: 1;
+    transition: opacity 0.5s ease, width 0.5s ease;
+}
+
+.barra-lateral span.oculto {
+    opacity: 0;
+    width: 0;
+}
+
+.barra-lateral .navegacion {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    flex-grow: 1;
+}
+
+.barra-lateral .navegacion ul {
+    width: 100%;
+}
+
+.barra-lateral .navegacion li {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+.barra-lateral .navegacion a {
+    width: 100%;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 10px;
+    color: var(--color-texto-menu);
+}
+
+.barra-lateral .navegacion a:hover {
+    background-color: var(--color-menu-hover);
+    color: var(--color-menu-hover-texto);
+}
+
+.barra-lateral .navegacion ion-icon {
+    min-width: 50px;
+    font-size: 20px;
+}
+
+.barra-lateral .linea {
+    width: 100%;
+    height: 1px;
+    margin-top: 15px;
+    background-color: var(--color-linea);
+}
+
+.cerrar-sesion {
     margin-top: auto;
-    flex-shrink: 0;
-  }
+    width: 100%;
+}
 
-  .main-content {
-    transition: margin-left 0.3s, margin-bottom 0.3s;
-  }
+.cerrar-sesion a {
+    width: 100%;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 10px;
+    color: var(--color-texto-menu);
+    padding-left: 15px;
+}
 
-  @media (max-width: 768px) {
-    .sidebar {
-      width: 100%;
-      height: auto;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      top: auto;
-      transition: bottom 0.3s;
+.cerrar-sesion a:hover {
+    background-color: var(--color-menu-hover);
+    color: var(--color-menu-hover-texto);
+}
+
+.cerrar-sesion ion-icon {
+    min-width: 50px;
+    font-size: 20px;
+}
+
+/* Centrar el contenedor del modo oscuro */
+.dark-mode-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+}
+
+main {
+    margin-left: 250px;
+    padding: 20px;
+    transition: margin-left 0.5s ease;
+    background: inherit;
+}
+
+main.min-main {
+    margin-left: 80px;
+}
+
+@media (max-width: 600px) {
+    .barra-lateral {
+        position: fixed;
+        left: -250px;
     }
-
-    .sidebar-container.collapsed .sidebar {
-      display: none;
+    .max-barra-lateral {
+        left: 0;
     }
-
-    .sidebar-container.expanded .sidebar {
-      display: block;
+    .menu {
+        display: flex;
     }
-
-    .sidebar-container.expanded .sidebar-toggle::after {
-      content: '✕';
+    .menu ion-icon:nth-child(2) {
+        display: none;
     }
-
-    .main-content {
-      margin-bottom: 0;
+    main {
+        margin-left: 0;
     }
-
-    .sidebar-container.expanded ~ .main-content {
-      margin-bottom: 250px;
+    main.min-main {
+        margin-left: 0;
     }
-  }
+}
 
-  @media (min-width: 769px) and (max-width: 1300px) {
-    .sidebar-container.collapsed .sidebar {
-      left: -250px;
-    }
-
-    .sidebar-container.expanded .sidebar {
-      left: 0;
-    }
-
-    .main-content {
-      margin-left: 0;
-    }
-
-    .sidebar-container.expanded ~ .main-content {
-      margin-left: 250px;
-    }
-  }
-
-  @media (min-width: 1301px) {
-    .sidebar-container.collapsed .sidebar {
-      left: -250px;
-    }
-
-    .sidebar-container.expanded .sidebar {
-      left: 0;
-    }
-
-    .main-content {
-      margin-left: 0;
-    }
-
-    .sidebar-container.expanded ~ .main-content {
-      margin-left: 250px;
-    }
-  }
 </style>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const sidebarToggle = document.getElementById('sidebar-toggle');
-    const sidebarContainer = document.querySelector('.sidebar-container');
-    const mainContent = document.getElementById('main-content');
-    const sidebar = document.getElementById('sidebar');
-
-    if (sidebarToggle && sidebarContainer && mainContent && sidebar) {
-      sidebarToggle.addEventListener('click', () => {
-        sidebarContainer.classList.toggle('collapsed');
-        sidebarContainer.classList.toggle('expanded');
-        sidebar.classList.toggle('open');
-        adjustContentMargin();
-      });
-    }
-
-    window.addEventListener('resize', adjustContentMargin);
-
-    function adjustContentMargin() {
-      if (sidebarContainer && mainContent && sidebar) {
-        if (window.innerWidth >= 1301 && sidebarContainer.classList.contains('expanded')) {
-          mainContent.style.marginLeft = `${sidebar.offsetWidth}px`;
-          mainContent.style.marginBottom = '0';
-        } else if (window.innerWidth >= 769 && sidebarContainer.classList.contains('expanded')) {
-          mainContent.style.marginLeft = '0';
-          mainContent.style.marginBottom = `${sidebar.offsetHeight}px`;
-        } else if (sidebarContainer.classList.contains('expanded')) {
-          mainContent.style.marginLeft = '0';
-          mainContent.style.marginBottom = `${sidebar.offsetHeight}px`;
-        } else {
-          mainContent.style.marginLeft = '0';
-          mainContent.style.marginBottom = '0';
-        }
-      }
-    }
-  });
-</script>

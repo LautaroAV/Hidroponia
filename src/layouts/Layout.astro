@@ -1,6 +1,5 @@
 ---
 import Sidebar from '../components/Sidebar.astro';
-import DarkMode from '../components/DarkMode.astro';
 
 interface Props {
   title: string;
@@ -9,121 +8,88 @@ interface Props {
 const { title } = Astro.props;
 ---
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="description" content="Astro description" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
-  </head>
-  <body>
-    <div class="container">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content="Astro description" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="generator" content={Astro.generator} />
+  <title>{title}</title>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
       <Sidebar />
-      <div class="main-content">
-        <DarkMode />
-        <slot />
-      </div>
     </div>
-  </body>
+    <div class="main-content">
+      <slot />
+    </div>
+  </div>
+</body>
 
-  <style is:global>
-    :root {
-      --accent: 136, 58, 234;
-      --accent-light: 224, 204, 250;
-      --accent-dark: 49, 10, 101;
-      --accent-gradient: linear-gradient(
-        45deg,
-        rgb(var(--accent)),
-        rgb(var(--accent-light)) 30%,
-        white 60%
-      );
-      --background-color-light: #f4f4f4;
-      --background-color-dark: #333333;
-      --text-color-light: #000000;
-      --text-color-dark: #ffffff;
-      --sidebar-bg-light: #ffffff;
-      --sidebar-text-light: #000000;
-      --sidebar-bg-dark: #000000;
-      --sidebar-text-dark: #ffffff;
-    }
+<style>
+  :root {
+    --accent: 136, 58, 234;
+    --accent-light: 224, 204, 250;
+    --accent-dark: 49, 10, 101;
+    --accent-gradient: linear-gradient(
+      45deg,
+      rgb(var(--accent)),
+      rgb(var(--accent-light)) 30%,
+      white 60%
+    );
+    --background-color-light: #f4f4f4;
+    --background-color-dark: #333333;
+    --text-color-light: #000000;
+    --text-color-dark: #ffffff;
+    --sidebar-bg-light: #ffffff;
+    --sidebar-text-light: #000000;
+    --sidebar-bg-dark: #000000;
+    --sidebar-text-dark: #ffffff;
+  }
 
-    html {
-      font-family: system-ui, sans-serif;
-    }
+  html {
+    font-family: system-ui, sans-serif;
+  }
 
-    body {
-      background: var(--background-color-light);
-      color: var(--text-color-light);
-      transition: background 0.3s, color 0.3s;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-    }
+  body {
+    background: var(--background-color-light);
+    color: var(--text-color-light);
+    transition: background 0.3s, color 0.3s;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 
-    body.dark-mode {
-      background: var(--background-color-dark);
-      color: var(--text-color-dark);
+  body.dark-mode {
+    background: var(--background-color-dark);
+    color: var(--text-color-dark);
+  }
+
+  .container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+  }
+
+  .main-content {
+    flex: 1;
+    background: inherit; /* Hereda el fondo del body */
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column; /* Cambia el diseño a columna en dispositivos pequeños */
     }
 
     .sidebar {
-      background-color: var(--sidebar-bg-light);
-      color: var(--sidebar-text-light);
+      width: 100%; /* El sidebar ocupa todo el ancho en dispositivos pequeños */
     }
-
-    body.dark-mode .sidebar {
-      background-color: var(--sidebar-bg-dark);
-      color: var(--sidebar-text-dark);
-    }
-
-    #theme-toggle {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 10px 20px;
-      cursor: pointer;
-    }
-
-    .container {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      overflow: hidden;
-    }
-
-    .main-content {
-      flex: 1;
-      margin-left: 250px;
-      transition: margin-left 0.3s, margin-top 0.3s;
-    }
-
-    @media (max-width: 768px) {
-      .main-content {
-        margin-left: 0;
-        margin-top: 250px;
-      }
-    }
-
-    @media (min-width: 769px) and (max-width: 1300px) {
-      .main-content {
-        margin-left: 0;
-      }
-
-      .sidebar-container.expanded ~ .main-content {
-        margin-left: 250px;
-      }
-    }
-
-    @media (min-width: 1301px) {
-      .main-content {
-        margin-left: 250px;
-      }
-
-      .sidebar-container.collapsed ~ .main-content {
-        margin-left: 0;
-      }
-    }
-  </style>
+  }
+</style>
 </html>
