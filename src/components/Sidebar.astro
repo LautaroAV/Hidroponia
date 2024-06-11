@@ -1,5 +1,4 @@
 ---
-// Importa el componente de Dark Mode
 import DarkMode from './DarkMode.astro';
 ---
 
@@ -62,14 +61,14 @@ import DarkMode from './DarkMode.astro';
           <span>Configuración</span>
         </a>
       </li>
+      <li class="cerrar_sesion">
+        <a href="/api/auth/signout">
+          <ion-icon name="log-out-outline"></ion-icon>
+          <span>Cerrar Sesión</span>
+        </a>
+      </li>
     </ul>
   </nav>
-
-  <div class="cerrar-sesion">
-    <a href="/api/auth/signout">
-      <ion-icon name="log-out-outline"></ion-icon>
-      <span>Cerrar Sesión</span>
-    </a>
   </div>
 </div>
 
@@ -202,6 +201,7 @@ body {
     padding: 1rem;
     color: var(--brand-logo-text);
     background-color: var(--brand-logo-bg);
+    transition: color 0.3s ease, background-color 0.3s ease; /* Agrega transiciones solo si las necesitas */
 }
 
 .brand-logo img {
@@ -272,32 +272,6 @@ body {
     height: 1px;
     margin-top: 15px;
     background-color: var(--color-linea);
-}
-
-.cerrar-sesion {
-    margin-top: auto;
-    width: 100%;
-}
-
-.cerrar-sesion a {
-    width: 100%;
-    height: 45px;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    border-radius: 10px;
-    color: var(--color-texto-menu);
-    padding-left: 15px;
-}
-
-.cerrar-sesion a:hover {
-    background-color: var(--color-menu-hover);
-    color: var(--color-menu-hover-texto);
-}
-
-.cerrar-sesion ion-icon {
-    min-width: 50px;
-    font-size: 20px;
 }
 
 /* Centrar el contenedor del modo oscuro */

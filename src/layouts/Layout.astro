@@ -16,6 +16,7 @@ const { title } = Astro.props;
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="generator" content={Astro.generator} />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <title>{title}</title>
 </head>
 <body>
@@ -51,7 +52,7 @@ const { title } = Astro.props;
   }
 
   html {
-    font-family: system-ui, sans-serif;
+    font-family: 'Poppins', system-ui, sans-serif;
   }
 
   body {
@@ -79,16 +80,16 @@ const { title } = Astro.props;
 
   .main-content {
     flex: 1;
-    background: inherit; /* Hereda el fondo del body */
+    background: inherit; 
   }
 
   @media (max-width: 768px) {
     .container {
-      flex-direction: column; /* Cambia el diseño a columna en dispositivos pequeños */
+      flex-direction: column; 
     }
 
     .sidebar {
-      width: 100%; /* El sidebar ocupa todo el ancho en dispositivos pequeños */
+      width: 100%; 
     }
   }
 </style>

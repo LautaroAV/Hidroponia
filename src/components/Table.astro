@@ -52,17 +52,17 @@ const transformarTexto = (columnName: string, index: number): string => {
     .table-wrapper {
     width: 100%;
     max-width: 928px;
-    max-height: 650px; /* Solo el uso de max-height sin height fijo */
-    overflow: hidden; /* Cambiado a hidden para evitar que cambie el tamaño con el scroll */
+    max-height: 650px; 
+    overflow: hidden; 
     box-sizing: border-box;
     border-radius: 10px;
     margin: 0 auto;
   }
     .table-container {
       width: 100%;
-      height: 650px; /* Tamaño fijo */
+      height: 650px; 
       overflow-x: auto;
-      overflow-y: auto; /* Añadido para manejar el scroll vertical */
+      overflow-y: auto; 
     }
     .table {
       width: 100%;
@@ -79,7 +79,7 @@ const transformarTexto = (columnName: string, index: number): string => {
       text-align: center;
       border-bottom: 1px solid #ddd;
       height: 50px;
-      width: calc(100% / 5); /* Divide el ancho entre el número de columnas */
+      width: calc(100% / 5); 
     }
 
     .table th {
@@ -91,7 +91,6 @@ const transformarTexto = (columnName: string, index: number): string => {
       height: 50px;
     }
     .table td {
-      font-family: 'Arial', sans-serif;
       font-size: 14px;
       padding: 10px 15px;
       color: #333;
@@ -125,7 +124,7 @@ const transformarTexto = (columnName: string, index: number): string => {
       height: 100%;
     }
     .table tbody:empty::before {
-      content: "\\00a0"; /* non-breaking space */
+      content: "\\00a0"; 
       display: table-row;
       height: 100%;
     }
