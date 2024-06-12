@@ -4,7 +4,7 @@ import { supabase } from '../data/supabase';
 export async function obtenerUltimoRegistro(tabla, columna) {
   let { data, error } = await supabase
     .from(tabla)
-    .select(`${columna}, fecha, hora`) // Utiliza el parámetro 'columna'
+    .select(`${columna}, fecha, hora`) 
     .order("id", { ascending: false })
     .limit(1);
 
@@ -14,7 +14,7 @@ export async function obtenerUltimoRegistro(tabla, columna) {
   }
 
   if (data && data.length > 0) {
-    return data[0]; // Retorna el primer objeto del array
+    return data[0];
   } else {
     return null;
   }
@@ -25,7 +25,7 @@ export async function obtenerRegistroMantenimiento() {
 
   let { data, error } = await supabase
     .from(mantenimiento)
-    .select(`tipo_sensor, tipo_mantenimiento, fecha, hora`) // Utiliza el parámetro 'columna'
+    .select(`tipo_sensor, tipo_mantenimiento, fecha, hora`)
     .order("id", { ascending: false })
     .limit(1);
 
@@ -35,7 +35,7 @@ export async function obtenerRegistroMantenimiento() {
   }
 
   if (data && data.length > 0) {
-    return data[0]; // Retorna el primer objeto del array
+    return data[0];
   } else {
     return null;
   }
