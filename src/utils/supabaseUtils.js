@@ -40,3 +40,15 @@ export async function obtenerRegistroMantenimiento() {
     return null;
   }
 }
+
+export async function obtenerDatos(tabla, campos) {
+    let { data, error } = await supabase.from(tabla).select("*");
+    if (error) {
+        console.error(`Error fetching data from ${tabla}:`, error);
+        return { valores: [], fechas: [] };
+    }
+
+    const valores = data?.map(objeto => objeto[campos.valor]);
+    const fechas = data?.map(objeto => objeto[campos.fecha]);
+    return { valores, fechas };
+}

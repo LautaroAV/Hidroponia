@@ -1,0 +1,104 @@
+<div>
+    <canvas id="myChart" width="450" height="220"></canvas>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script >
+    import Chart from 'chart.js/auto';
+    import { obtenerDatos } from "../utils/supabaseUtils.js";
+
+    const humedadCampos = { valor: "valor", fecha: "fecha" };
+    const { valores: valoresHumedad, fechas: fechitaHumedad } = await obtenerDatos("humedad", humedadCampos);
+
+    const temperaturaCampos = { valor: "valor", fecha: "fecha" };
+    const { valores: valoresTemp, fechas: fechitaTemp } = await obtenerDatos("temperatura", temperaturaCampos);
+
+    const nivel_aguaCampos = { valor: "valor", fecha: "fecha" };
+    const { valores: valoresNivelAgua, fechas: fechitaNivelAgua } = await obtenerDatos("nivel_agua", nivel_aguaCampos);
+
+    const luzCampos = { valor: "valor", fecha: "fecha" };
+    const { valores: valoresluz, fechas: fechitaluz } = await obtenerDatos("luz", luzCampos);
+
+    const phCampos = { valor: "valor", fecha: "fecha" };
+    const { valores: valoresPH, fechas: fechitaOH } = await obtenerDatos("pH", phCampos);
+
+    const ctx = (document.getElementById('myChart') as HTMLCanvasElement).getContext('2d');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: fechitaHumedad,
+            datasets: [
+                {
+                    label: 'Humedad',
+                    data: valoresHumedad,
+                    borderColor: 'rgba(255, 0, 0, 1)', 
+                    borderWidth: 4,
+                    yAxisID: 'y'
+                },
+                {
+                    label: 'Temperatura',
+                    data: valoresTemp,
+                    borderColor: 'rgba(255, 255, 0, 1)',
+                    borderWidth: 4,
+                    yAxisID: 'y1'
+                },
+                {
+                    label: 'Nivel de Agua',
+                    data: valoresNivelAgua,
+                    borderColor: 'rgba(255, 165, 0, 1)', 
+                    borderWidth: 4,
+                    yAxisID: 'y2'
+                },
+                {
+                    label: 'Luz',
+                    data: valoresluz,
+                    borderColor: 'rgba(128, 0, 128, 1)', 
+                    borderWidth: 4,
+                    yAxisID: 'y3'
+                },
+                {
+                    label: 'pH',
+                    data: valoresPH,
+                    borderColor: 'rgba(0, 255, 255, 1)',
+                    borderWidth: 4,
+                    yAxisID: 'y4'
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    position: 'left'
+                },
+                y1: {
+                    beginAtZero: true,
+                    position: 'right'
+                },
+                y2: {
+                    beginAtZero: true,
+                    position: 'left',
+                    grid: {
+                        drawOnChartArea: false
+                    }
+                },
+                y3: {
+                    beginAtZero: true,
+                    position: 'right',
+                    grid: {
+                        drawOnChartArea: false
+                    }
+                },
+                y4: {
+                    beginAtZero: true,
+                    position: 'left',
+                    grid: {
+                        drawOnChartArea: false
+                    }
+                }
+            }
+        }
+    });
+
+</script>
